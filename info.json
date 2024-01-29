@@ -1,0 +1,14 @@
+{
+    "schemaVersion": "1.0",
+    "artifacts": {
+        "miotool": {
+            "type": "executable",
+            "version": "2.0.0",
+            "variants": [
+                {
+                    "path": "miotool-2.0.2/bin/miotool"
+                },
+            ]
+        }
+    }
+}
