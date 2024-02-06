@@ -6,9 +6,13 @@
             "version": "2.0.0",
             "variants": [
                 {
-                    "path": "miotool-2.0.0/bin/miotool",
+                    "path": "miotool-2.0.0-macos/miotool",
                     "supportedTriples": ["x86_64-apple-macosx", "arm64-apple-macosx"]
                 },
+                {
+                    "path": "miotool-2.0.0-linux/miotool",
+                    "supportedTriples": ["x86_64-unknown-linux-gnu"]
+                }
             ]
         }
     }
