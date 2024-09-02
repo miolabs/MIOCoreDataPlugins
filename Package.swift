@@ -1,4 +1,4 @@
-// swift-tools-version: 5.6
+// swift-tools-version: 5.9
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -18,13 +18,11 @@ let package = Package(
         .plugin(
             name: "MIOCoreDataBuildModelPlugin",
             capability: .buildTool(),
-            dependencies: [
-                "MIOToolBinary"
-            ]
+            dependencies: [ "model-builder" ]
         ),
         .binaryTarget(
-            name: "MIOToolBinary",
-            path: "Binaries/MIOTool.artifactbundle"
+            name: "model-builder",
+            path: "Binaries/model_builder.artifactbundle"
         ),
     ]
 )
