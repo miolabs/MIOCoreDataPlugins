@@ -8,21 +8,21 @@ let package = Package(
     products: [
         // Products can be used to vend plugins, making them visible to other packages.
         .plugin(
-            name: "MIOCoreDataBuildModelPlugin",
-            targets: ["MIOCoreDataBuildModelPlugin"]
+            name: "ModelBuilderPlugin",
+            targets: ["ModelBuilderPlugin"]
         ),
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
         .plugin(
-            name: "MIOCoreDataBuildModelPlugin",
+            name: "ModelBuilderPlugin",
             capability: .buildTool(),
             dependencies: [ "model-builder" ]
         ),
         .binaryTarget(
             name: "model-builder",
-            path: "Binaries/model_builder.artifactbundle"
+            path: "Binaries/model-builder.artifactbundle"
         ),
     ]
 )

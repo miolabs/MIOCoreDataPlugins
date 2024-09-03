@@ -2,9 +2,11 @@ import PackagePlugin
 import Foundation
 
 @main
-struct MIOCoreDataBuildModelPlugin: BuildToolPlugin {
+struct ModelBuilderPlugin: BuildToolPlugin
+{
     /// Entry point for creating build commands for targets in Swift packages.
-    func createBuildCommands(context: PluginContext, target: Target) async throws -> [Command] {
+    func createBuildCommands(context: PluginContext, target: Target) async throws -> [Command]
+    {
         // This plugin only runs for package targets that can have source files.
         guard let sourceFiles = target.sourceModule?.sourceFiles else { return [] }
         
@@ -21,9 +23,11 @@ struct MIOCoreDataBuildModelPlugin: BuildToolPlugin {
 #if canImport(XcodeProjectPlugin)
 import XcodeProjectPlugin
 
-extension MIOCoreDataBuildModelPlugin: XcodeBuildToolPlugin {
+extension ModelBuilderPlugin: XcodeBuildToolPlugin
+{
     // Entry point for creating build commands for targets in Xcode projects.
-    func createBuildCommands(context: XcodePluginContext, target: XcodeTarget) throws -> [Command] {
+    func createBuildCommands(context: XcodePluginContext, target: XcodeTarget) throws -> [Command]
+    {
         // Find the code generator tool to run (replace this with the actual one).
         let generatorTool = try context.tool(named: "model-builder")
                 
@@ -36,26 +40,28 @@ extension MIOCoreDataBuildModelPlugin: XcodeBuildToolPlugin {
 
 #endif
 
-extension MIOCoreDataBuildModelPlugin {
+extension ModelBuilderPlugin
+{
     /// Shared function that returns a configured build command if the input files is one that should be processed.
-    func createBuildCommand(for inputPath: Path, in outputDirectoryPath: Path, with generatorToolPath: Path, configPath: Path? ) -> Command? {
+    func createBuildCommand(for inputPath: Path, in outputDirectoryPath: Path, with toolPath: Path, configPath: Path? = nil ) -> Command? {
         // Skip any file that doesn't have the extension we're looking for (replace this with the actual one).
         guard inputPath.extension == "xcdatamodeld" else { return .none }
         
         var arguments:[String] = []
-//        #if os(iOS)
+        //        #if os(iOS)
         arguments.append( "--objc" )
-//        #endif
+        //        #endif
         
         arguments.append( "-o" )
         arguments.append( "\(outputDirectoryPath)" )
         arguments.append( "\(inputPath)" )
         
         // Return a command that will run during the build to generate the output file.
-        return .prebuildCommand(displayName: "Generating model classes from \(inputPath) to \(outputDirectoryPath) with \(toolPath)",
+        return .prebuildCommand(displayName: "Generating model classes from \(inputPath) to \(outputDirectoryPath) with \(toolPath)" + ( configPath != nil ? "config: \(configPath!)" : " NO CONFIG"),
                                 executable: toolPath,
                                 arguments: arguments,
                                 outputFilesDirectory: outputDirectoryPath
         )
+    }
 }
 
