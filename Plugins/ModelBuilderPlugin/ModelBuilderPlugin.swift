@@ -33,7 +33,7 @@ extension ModelBuilderPlugin: XcodeBuildToolPlugin
                 
         // Construct a build command for each source file with a particular suffix.
         return target.inputFiles.map(\.path).compactMap {
-            createBuildCommand(for: $0, in: context.pluginWorkDirectory, with: generatorTool.path, configPath: context.xcodeProject.directory )
+            createBuildCommand(for: $0, in: context.pluginWorkDirectory, with: generatorTool.path, configPath: context.xcodeProject.directory, objc:true )
         }
     }
 }
@@ -43,21 +43,19 @@ extension ModelBuilderPlugin: XcodeBuildToolPlugin
 extension ModelBuilderPlugin
 {
     /// Shared function that returns a configured build command if the input files is one that should be processed.
-    func createBuildCommand(for inputPath: Path, in outputDirectoryPath: Path, with toolPath: Path, configPath: Path? = nil ) -> Command? {
+    func createBuildCommand(for inputPath: Path, in outputDirectoryPath: Path, with toolPath: Path, configPath: Path? = nil, objc:Bool = false ) -> Command? {
         // Skip any file that doesn't have the extension we're looking for (replace this with the actual one).
         guard inputPath.extension == "xcdatamodeld" else { return .none }
         
         var arguments:[String] = []
-        //        #if os(iOS)
-        arguments.append( "--objc" )
-        //        #endif
         
+        if objc { arguments.append( "--objc" ) }
         arguments.append( "-o" )
         arguments.append( "\(outputDirectoryPath)" )
         arguments.append( "\(inputPath)" )
         
         // Return a command that will run during the build to generate the output file.
-        return .prebuildCommand(displayName: "Generating model classes from \(inputPath) to \(outputDirectoryPath) with \(toolPath)" + ( configPath != nil ? "config: \(configPath!)" : " NO CONFIG"),
+        return .prebuildCommand(displayName: "Generating model classes from \(inputPath) to \(outputDirectoryPath) with \(toolPath)",
                                 executable: toolPath,
                                 arguments: arguments,
                                 outputFilesDirectory: outputDirectoryPath
