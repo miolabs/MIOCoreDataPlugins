@@ -1,4 +1,3 @@
-
 name: Build Linux Plugin
 
 on:
@@ -15,14 +14,67 @@ jobs:
     steps:
       - name: Install dependencias for swift compiler  # https://www.swift.org/install/linux/tarball/  Instructions depends on version of Ubuntu
         run: |
-          docker pull swift
-          docker run --privileged --name swift-latest swift:latest /bin/bash
-          docker start swift-latest
-          #docker attach swift-latest
-          echo "installing sdk"
-          docker exec swift-latest swift sdk install https://download.swift.org/swift-6.0-branch/static-sdk/swift-6.0-DEVELOPMENT-SNAPSHOT-2024-07-02-a/swift-6.0-DEVELOPMENT-SNAPSHOT-2024-07-02-a_static-linux-0.0.1.artifactbundle.tar.gz --checksum 42a361e1a240e97e4bb3a388f2f947409011dcd3d3f20b396c28999e9736df36
-          docker logs swift-latest
-          echo "trying sdk list"
-          docker exec swift-latest swift sdk list
-          docker logs swift-latest
+          sudo apt-get update
+          sudo apt-get install \
+              binutils \
+              git \
+              gnupg2 \
+              libc6-dev \
+              libcurl4-openssl-dev \
+              libedit2 \
+              libgcc-11-dev \
+              libpython3-dev \
+              libsqlite3-0 \
+              libstdc++-11-dev \
+              libxml2-dev \
+              libz3-dev \
+              pkg-config \
+              python3-lldb-13 \
+              tzdata \
+              unzip \
+              zlib1g-dev
 
+      - name: Download swift
+        run: |
+          curl -L -o swift.tar.gz https://download.swift.org/swift-6.0-branch/ubuntu2204/swift-6.0-DEVELOPMENT-SNAPSHOT-2024-08-22-a/swift-6.0-DEVELOPMENT-SNAPSHOT-2024-08-22-a-ubuntu22.04.tar.gz
+          curl -L -o swift.tar.gz.sig https://download.swift.org/swift-6.0-branch/ubuntu2204/swift-6.0-DEVELOPMENT-SNAPSHOT-2024-08-22-a/swift-6.0-DEVELOPMENT-SNAPSHOT-2024-08-22-a-ubuntu22.04.tar.gz.sig
+
+      - name: Verify swift
+        run: |
+          gpg --keyserver hkp://keyserver.ubuntu.com \
+              --recv-keys \
+              'A62A E125 BBBF BB96 A6E0  42EC 925C C1CC ED3D 1561'\
+              'E813 C892 820A 6FA1 3755  B268 F167 DF1A CF9C E069'
+          gpg --keyserver hkp://keyserver.ubuntu.com --refresh-keys Swift
+          gpg --verify swift.tar.gz.sig swift.tar.gz
+      
+      - name: Install swift 
+        run: |
+          mkdir temp && tar -xzf swift.tar.gz -C temp
+          mv temp/*/* ./  # Mueve los archivos de la carpeta interna al directorio actual
+          echo "ls -al"
+          ls 
+          echo "ls usr"
+          ls usr
+          echo "ls usr/bin"
+          ls -al usr/bin
+          echo "ls usr/lib"
+          ls -al usr/lib
+          echo "ls usr/libexec"
+          ls -al usr/libexec
+          echo "ls usr/libexec/swift"
+          ls -al usr/libexec/swift
+          PWD=`pwd`
+          SWIFT_PATH="${PWD}/usr/bin"
+          export PATH="${SWIFT_PATH}:${PATH}"
+          echo "Path: ${PATH}"
+          swift --version
+          #echo "installing sdk"
+          #swift sdk install https://download.swift.org/swift-6.0-branch/static-sdk/swift-6.0-DEVELOPMENT-SNAPSHOT-2024-07-02-a/swift-6.0-DEVELOPMENT-SNAPSHOT-2024-07-02-a_static-linux-0.0.1.artifactbundle.tar.gz --checksum 42a361e1a240e97e4bb3a388f2f947409011dcd3d3f20b396c28999e9736df36
+          #swift sdk list
+
+
+      - name: Install static linux sdk
+        run: |
+          swift sdk install https://download.swift.org/swift-6.0-branch/static-sdk/swift-6.0-DEVELOPMENT-SNAPSHOT-2024-07-02-a/swift-6.0-DEVELOPMENT-SNAPSHOT-2024-07-02-a_static-linux-0.0.1.artifactbundle.tar.gz --checksum 42a361e1a240e97e4bb3a388f2f947409011dcd3d3f20b396c28999e9736df36
+          swift sdk list
