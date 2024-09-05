@@ -36,8 +36,8 @@ jobs:
 
       - name: Download swift
         run: |
-          curl -L -o swift.tar.gz https://download.swift.org/swift-5.10.1-release/ubuntu2204/swift-5.10.1-RELEASE/swift-5.10.1-RELEASE-ubuntu22.04.tar.gz
-          curl -L -o https://download.swift.org/swift-5.10.1-release/ubuntu2204/swift-5.10.1-RELEASE/swift-5.10.1-RELEASE-ubuntu22.04.tar.gz.sig
+          curl -L -o swift-5.10.1-RELEASE-ubuntu22.04.tar.gz https://download.swift.org/swift-5.10.1-release/ubuntu2204/swift-5.10.1-RELEASE/swift-5.10.1-RELEASE-ubuntu22.04.tar.gz
+          curl -L -o swift-5.10.1-RELEASE-ubuntu22.04.tar.gz.sig https://download.swift.org/swift-5.10.1-release/ubuntu2204/swift-5.10.1-RELEASE/swift-5.10.1-RELEASE-ubuntu22.04.tar.gz.sig
 
       - name: Verify swift
         run: |
