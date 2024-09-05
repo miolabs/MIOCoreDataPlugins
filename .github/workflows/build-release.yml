@@ -41,10 +41,10 @@ jobs:
       - name: Install swift 
         run: |
           tar xzf swift.tar.gz
-          echo "ls"
+          echo "ls -al"
           ls 
           echo "ls usr"
-          ls usr
+          ls swift-5.10.1-RELEASE-ubuntu22.04
           PWD=`pwd`
           SWIFT_PATH="${PWD}/usr/bin"
           export PATH="${SWIFT_PATH}:${PATH}"
