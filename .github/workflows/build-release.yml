@@ -1,0 +1,53 @@
+name: Build Linux Plugin
+
+on:
+  workflow_dispatch:
+    inputs:
+      CLIENT:
+        description: 'customization folder name'
+        required: true
+
+
+jobs:
+  print-parameters:
+    runs-on: ubuntu-22.04  # specific version because swift and static swift sdk depend on specfic version of ubuntu
+    steps:
+      - name: Install Dependencias for swift compiler  # https://www.swift.org/install/linux/tarball/  Instructions depends on version of Ubuntu
+        run: |
+          sudo apt-get update
+          sudo apt-get install \
+              binutils \
+              git \
+              gnupg2 \
+              libc6-dev \
+              libcurl4-openssl-dev \
+              libedit2 \
+              libgcc-11-dev \
+              libpython3-dev \
+              libsqlite3-0 \
+              libstdc++-11-dev \
+              libxml2-dev \
+              libz3-dev \
+              pkg-config \
+              python3-lldb-13 \
+              tzdata \
+              unzip \
+              zlib1g-dev
+
+      - name: Download swift
+        run: |
+          curl -L -o swift.tar.gz https://download.swift.org/swift-5.10.1-release/ubuntu2204/swift-5.10.1-RELEASE/swift-5.10.1-RELEASE-ubuntu22.04.tar.gz
+
+      - name: Install swift 
+        run: |
+          tar xzf swift.tar.gz
+          echo "ls"
+          ls 
+          echo "ls usr"
+          ls usr
+          PWD=`pwd`
+          SWIFT_PATH="${PWD}/usr/bin"
+          export PATH="${SWIFT_PATH}:${PATH}"
+          echo "Path: ${PATH}"
+          swift --version
+          
