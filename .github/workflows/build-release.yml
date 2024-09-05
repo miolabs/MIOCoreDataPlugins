@@ -60,6 +60,8 @@ jobs:
           ls -al usr/lib
           echo "ls usr/libexec"
           ls -al usr/libexec
+          echo "ls usr/libexec/swift"
+          ls -al usr/libexec/swift
           PWD=`pwd`
           SWIFT_PATH="${PWD}/usr/bin"
           export PATH="${SWIFT_PATH}:${PATH}"
