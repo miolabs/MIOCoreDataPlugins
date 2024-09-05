@@ -16,7 +16,7 @@ jobs:
       - name: Install dependencias for swift compiler  # https://www.swift.org/install/linux/tarball/  Instructions depends on version of Ubuntu
         run: |
           docker pull swift
-          docker run --privileged --interactive --tty --name swift-latest swift:latest /bin/bash
+          docker run --privileged --name swift-latest swift:latest /bin/bash
           docker start swift-latest
           #docker attach swift-latest
           echo "installing sdk"
