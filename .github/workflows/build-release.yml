@@ -36,12 +36,19 @@ jobs:
 
       - name: Download swift
         run: |
-          curl -L -o swift.tar.gz https://download.swift.org/swift-5.10.1-release/ubuntu2204/swift-5.10.1-RELEASE/swift-5.10.1-RELEASE-ubuntu22.04.tar.gz
+          curl -L -o swift-5.10.1-RELEASE-ubuntu22.04.tar.gz https://download.swift.org/swift-5.10.1-release/ubuntu2204/swift-5.10.1-RELEASE/swift-5.10.1-RELEASE-ubuntu22.04.tar.gz
 
       - name: Install swift 
         run: |
-          tar xzf swift.tar.gz
-          mkdir temp && tar -xzf swift.tar.gz -C temp
+          gpg --keyserver hkp://keyserver.ubuntu.com \
+              --recv-keys \
+              'A62A E125 BBBF BB96 A6E0  42EC 925C C1CC ED3D 1561'\
+              'E813 C892 820A 6FA1 3755  B268 F167 DF1A CF9C E069'
+          gpg --keyserver hkp://keyserver.ubuntu.com --refresh-keys Swift
+          gpg --verify swift-5.10.1-RELEASE-ubuntu22.04.tar.gz.sig
+          
+          #tar xzf swift-5.10.1-RELEASE-ubuntu22.04.tar.gz
+          mkdir temp && tar -xzf swift-5.10.1-RELEASE-ubuntu22.04.tar.gz -C temp
           mv temp/*/* ./  # Mueve los archivos de la carpeta interna al directorio actual
           echo "ls -al"
           ls 
@@ -49,8 +56,8 @@ jobs:
           ls usr
           echo "ls temp"
           ls temp
-          echo "ls swift-5.10.1-RELEASE-ubuntu22.04"
-          ls swift-5.10.1-RELEASE-ubuntu22.04
+          #echo "ls swift-5.10.1-RELEASE-ubuntu22.04"
+          #ls swift-5.10.1-RELEASE-ubuntu22.04
           PWD=`pwd`
           SWIFT_PATH="${PWD}/usr/bin"
           export PATH="${SWIFT_PATH}:${PATH}"
