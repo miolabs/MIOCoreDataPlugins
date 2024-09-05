@@ -66,7 +66,8 @@ jobs:
           ls -al usr/libexec/swift
           PWD=`pwd`
           SWIFT_PATH="${PWD}/usr/bin"
-          export PATH="${SWIFT_PATH}:${PATH}"
+          #export PATH="${SWIFT_PATH}:${PATH}"
+          echo "${SWIFT_PATH}" >> $GITHUB_PATH
           echo "Path: ${PATH}"
           swift --version
           #echo "installing sdk"
