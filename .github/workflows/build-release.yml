@@ -54,10 +54,12 @@ jobs:
           ls 
           echo "ls usr"
           ls usr
-          echo "ls temp"
-          ls temp
-          #echo "ls swift-5.10.1-RELEASE-ubuntu22.04"
-          #ls swift-5.10.1-RELEASE-ubuntu22.04
+          echo "ls usr/bin"
+          ls -al usr/bin
+          echo "ls usr/lib"
+          ls -al usr/lib
+          echo "ls usr/libexec"
+          ls -al usr/libexec
           PWD=`pwd`
           SWIFT_PATH="${PWD}/usr/bin"
           export PATH="${SWIFT_PATH}:${PATH}"
